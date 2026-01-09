@@ -12,12 +12,12 @@ public class FSMAgentController : MonoBehaviour
         Search
     }
 
-    State currentState;
+    State currentState = State.Patrol;
 
-    Animator fsmAnimator;
+    //Animator fsmAnimator;
 
     //ai navigation
-    NavMeshAgent agent;
+    [SerializeField] NavMeshAgent agent;
 
     //guards destination
     [SerializeField] private List<Vector3> goals;
@@ -29,13 +29,15 @@ public class FSMAgentController : MonoBehaviour
     [SerializeField] Transform target;
 
     List<Transform> targets;
-    int currentIndex;
+    [SerializeField] int currentIndex;
     int previousIndex;
+
+    LayerMask aiLayerMask;
 
     void Awake()
     {
         //get components before scene starts
-        fsmAnimator = GetComponent<Animator>();
+        //fsmAnimator = GetComponent<Animator>();
         agent = GetComponent<NavMeshAgent>();
         pos = transform.position;
 
@@ -56,7 +58,21 @@ public class FSMAgentController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        switch(currentState)
+        {
+            case State.Patrol:
+                agent.speed = speed;
+                Patrol();
+                Debug.Log("Patrol");
+                break;
+            case State.Search:
+                Debug.Log("Search");
+                break;
+            case State.Chase:
+                agent.speed = chaseSpeed;
+                Debug.Log("Chase");
+                break;
+        }
     }
 
     void Patrol()
@@ -64,7 +80,13 @@ public class FSMAgentController : MonoBehaviour
         if(agent.remainingDistance <= .2f)
         {
             SetNextGoal();
-            agent.destination = goals[currentIndex];
+        }
+
+        RaycastHit hit;
+        if(Physics.Raycast(transform.position, transform.forward, out hit, Mathf.Infinity, aiLayerMask))
+        {
+            currentState = State.Chase;
+            target = hit.transform;
         }
     }
 
@@ -74,5 +96,8 @@ public class FSMAgentController : MonoBehaviour
         {
             currentIndex = UnityEngine.Random.Range(0, goals.Count);
         } while (currentIndex == previousIndex);
+
+        agent.destination = goals[currentIndex];
+        previousIndex = currentIndex;
     }
 }
