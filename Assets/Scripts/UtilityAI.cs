@@ -1,7 +1,5 @@
 using System.Collections.Generic;
 using JetBrains.Annotations;
-using UnityEditor.Playables;
-using UnityEditor.ShaderGraph.Internal;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Rendering;
@@ -10,32 +8,33 @@ using UnityEngine.Rendering;
 //also helped with AI
 public class UtilityAI : MonoBehaviour
 {
-    [SerializeField] List<UtilityActionAI> actions = new List<UtilityActionAI>();
+    [SerializeField] List<UtilityActionAI> actions = new List<UtilityActionAI>(); //standard action
 
-    [SerializeField] HealAction healAction;
-    HideAction hideAction;
+    [SerializeField] HealAction healAction; // special action
+    HideAction hideAction; // to reset timer
     float minHealth = 30f;
 
     void Awake()
     {
+        //get it in awake
         hideAction = GetComponent<HideAction>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        if(isSurvivalCritical())
+        if(isSurvivalCritical()) // if health is low 
         {
-            healAction.Execute();
+            healAction.Execute(); // override standard action and execute heal action
             return;
         }
 
-        ExecuteBestAction();
+        ExecuteBestAction(); //get best action to execture
     }
 
     bool isSurvivalCritical()
     {
-        return healAction.getHealth() <= minHealth;
+        return healAction.getHealth() <= minHealth; // if health is less than minimum recommended health
     }
 
     void ExecuteBestAction()
@@ -47,7 +46,7 @@ public class UtilityAI : MonoBehaviour
         foreach (var action in actions)
         {
             float score = action.GetUtilityScore();
-            if(score > highestScore)
+            if(score > highestScore) // if utility action is scored the highest, then store action
             {
                 highestScore = score;
                 bestAction = action;
@@ -56,7 +55,7 @@ public class UtilityAI : MonoBehaviour
 
         if(bestAction != null)
         {
-            bestAction.Execute();
+            bestAction.Execute(); //exectue the utility aciton with the highest score
         
             // if(bestAction != hideAction && hideAction.getCooldown() <= 0) hideAction.ResetTimer();
         }

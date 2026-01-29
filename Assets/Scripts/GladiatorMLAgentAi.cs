@@ -29,11 +29,15 @@ public class GladiatorMLAgentAi : Agent
         RequestDecision();
     }
 
+    /// Collects internal data (observations) to send to the neural network.
+    /// These are numerical values that help the agent "see" its own status.
     public override void CollectObservations(VectorSensor sensor)
     {
+        // Observe current health and ammo as percentages (0 to 1 range).
         sensor.AddObservation(health / maxHealth);
         sensor.AddObservation(ammo / maxAmmo);
 
+        // Observe own movement direction to help the AI learn velocity control.
         Rigidbody rb = GetComponent<Rigidbody>();
         sensor.AddObservation(rb.linearVelocity.normalized);
     }
@@ -42,8 +46,11 @@ public class GladiatorMLAgentAi : Agent
     {
         base.OnActionReceived(actions);
 
+        // Map brain output (-1 to 1) to movement and rotation.
         float moveStep = actions.ContinuousActions[0];
         float rotateStep = actions.ContinuousActions[1];
+        
+        // Apply movement forces.
         Rigidbody rb = GetComponent<Rigidbody>();
         Vector3 moveForward = transform.forward * moveStep * 5f;
         rb.linearVelocity = new Vector3(moveForward.x, rb.linearVelocity.y, moveForward.z);
@@ -59,24 +66,27 @@ public class GladiatorMLAgentAi : Agent
         AddReward(-0.001f);
     }
 
+    //when it hits an ai
     public void RegisteredHit()
     {
         AddReward(.5f);
     }
 
+    //when it defeated all enemies
     public void WonMatch()
     {
         SetReward(2.0f);
         EndEpisode();
     }
 
+    //when its taken damage
     public void TakeDamage(float damageValue)
     {
         health -= damageValue;
 
         AddReward(-.05f);
 
-        if(health <= 0)
+        if(health <= 0) // if the ai is dead
         {
             SetReward(-1.0f);
             EndEpisode();
@@ -85,6 +95,7 @@ public class GladiatorMLAgentAi : Agent
         }
     }
 
+    //if it colldies with any ai
     void OnCollisionEnter(Collision collision)
     {
         string layerName = LayerMask.LayerToName(collision.gameObject.layer);

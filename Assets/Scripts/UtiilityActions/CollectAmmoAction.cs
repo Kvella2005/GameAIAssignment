@@ -13,6 +13,7 @@ public class CollectAmmoAction : UtilityActionAI
     float maxAmmo = 30f;
     Transform ammoPos;
 
+    //calculate score
     public override float GetUtilityScore()
     {
         float desire = 1f - (ammoLevel / maxAmmo);
@@ -28,6 +29,7 @@ public class CollectAmmoAction : UtilityActionAI
         return (desire * weight) / distanceToAmmo;
     }
 
+    //go to the closest ammo pack
     public override void Execute()
     {
         if(ai.remainingDistance <= ai.stoppingDistance)
@@ -37,6 +39,7 @@ public class CollectAmmoAction : UtilityActionAI
         Debug.Log("Get ammo");
     }
 
+    //add ammo when collided with another trigger box
     public void AddAmmo(float newValue)
     {
         ammoLevel += newValue;
@@ -44,6 +47,7 @@ public class CollectAmmoAction : UtilityActionAI
         Debug.Log("Add ammo");
     }
 
+    //get closest ammo pack
     private Transform GetClosestAmmo()
     {
         Transform closest = null;

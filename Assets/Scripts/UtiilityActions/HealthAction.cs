@@ -26,6 +26,7 @@ public class HealAction: UtilityActionAI
         return (desire * weight) / distanceToHealth;
     }
 
+    //go to the closest health pack
     public override void Execute()
     {
         if(ai.remainingDistance <= ai.stoppingDistance)
@@ -35,29 +36,35 @@ public class HealAction: UtilityActionAI
         Debug.Log("Get health");
     }
 
+
+    //add health if interacted with health pack
     public void AddHealth(float newValue)
     {
         healthLevel += newValue;
         healthPosList.Remove(healthPos);
     }
 
+    //take damage if attacked
     public void TakeDamage(float damageValue)
     {
         healthLevel -= damageValue;
         if(healthLevel <= 0) Die();
     }
 
+    //die if health is less than or equal to 0
     private void Die()
     {
         Debug.Log("Strategist eliminated");
         gameObject.SetActive(false);
     }
 
+    //get current health from any script
     public float getHealth()
     {
         return healthLevel;
     }
 
+    //get closest health pack
     private Transform GetClosestHealthPack()
     {
         Transform closest = null;

@@ -18,19 +18,19 @@ public class HideAction : UtilityActionAI
 
     public override float GetUtilityScore()
     {
-        if(cooldownTimer > 0f)
+        if(cooldownTimer > 0f) // if the cooldown timer is still running (to prevent frame by frame resetting timer)
         {
             cooldownTimer-=Time.deltaTime;
         }
 
-        if(hidePosList.Count == 0) return float.MinValue;
+        if(hidePosList.Count == 0) return float.MinValue; // to check null
 
-        if(cooldownTimer > 0f)
+        if(cooldownTimer > 0f) // if timer is still going 
         {
             return 0;
         }
 
-        float closestDistance = float.MaxValue;
+        float closestDistance = float.MaxValue; //get closest enemy
         foreach(Transform enemy in enemyAi)
         {
             float distance = Vector3.Distance(transform.position, enemy.position);
@@ -39,20 +39,20 @@ public class HideAction : UtilityActionAI
                 closestDistance = distance;
             }
         }
-        float decayFactor = Mathf.Clamp01(1f - (hideTimer / maxHideTimer));
-        float dangerLevel = 1f / (closestDistance + 1f);
+        float decayFactor = Mathf.Clamp01(1f - (hideTimer / maxHideTimer)); //prevent the ai to hide for too long
+        float dangerLevel = 1f / (closestDistance + 1f); // get danger level from enemies closest distance
 
-        return (dangerLevel * weight) * decayFactor;
+        return (dangerLevel * weight) * decayFactor; // calculate utility score
     }
 
     public override void Execute()
     {    
-        if(hidePos == null)
+        if(hidePos == null) //if there is no hide position
         {
             // Use the actual transform for the exclusion check, not just position
-            hidePos = GetClosestHide(currentSpot != null ? currentSpot.position : (Vector3?)null);
+            hidePos = GetClosestHide(currentSpot != null ? currentSpot.position : (Vector3?)null); // get closest hide positon 
             
-            if(hidePos != null)
+            if(hidePos != null) //set destination to that and set timer to .001f
             {
                 hideTimer = 0.001f; // Start the timer so we don't re-pick next frame
                 ai.SetDestination(hidePos.position);
@@ -60,11 +60,11 @@ public class HideAction : UtilityActionAI
             }
         }
 
-        if(hidePos!= null && !ai.pathPending && ai.remainingDistance <= ai.stoppingDistance)
+        if(hidePos!= null && !ai.pathPending && ai.remainingDistance <= ai.stoppingDistance) //if ai reached destination, the start timer
         {
             hideTimer+=Time.deltaTime;
 
-            if (hideTimer >= maxHideTimer)
+            if (hideTimer >= maxHideTimer) // if timer is finished, resest everything
             {
                 cooldownTimer = 5f;
                 hidePos = null;
@@ -78,13 +78,14 @@ public class HideAction : UtilityActionAI
         Transform closest = null;
         float maxMinDist = float.MinValue;
 
-        foreach (Transform t in hidePosList)
+        foreach (Transform t in hidePosList) // go through every waypoint
         {
-            if (t == null) continue;
-            float dist = Vector3.Distance(transform.position, t.position);
-            if(dist < 1.5f || (currentSpot.HasValue && t.position == currentSpot.Value))
+            if (t == null) continue; // if it is null, then skip
+            float dist = Vector3.Distance(transform.position, t.position); //check distance between position and i
+            if(dist < 1.5f || (currentSpot.HasValue && t.position == currentSpot.Value)) //to prevent being in the same spot
                 continue;
 
+            //check if the enemy is close to the hide position
             float closestEnemyDistance = float.MaxValue;
             foreach(Transform enemy in enemyAi)
             {
@@ -100,7 +101,7 @@ public class HideAction : UtilityActionAI
         return closest;
     }
 
-    public void ResetTimer()
+    public void ResetTimer() //reset timer and hide position
     {
         if(cooldownTimer <= 0)
         {
@@ -109,7 +110,7 @@ public class HideAction : UtilityActionAI
         hidePos = null;
     }
 
-    public float getCooldown()
+    public float getCooldown() //get cooldown timer
     {
         return cooldownTimer;
     }
