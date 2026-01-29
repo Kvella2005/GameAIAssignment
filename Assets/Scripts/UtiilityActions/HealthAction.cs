@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 //Made with help of AI
 
@@ -7,7 +8,7 @@ public class HealAction: UtilityActionAI
 {
     [SerializeField] float weight;
     public List<Transform> healthPosList;
-    public Transform ai;
+    public NavMeshAgent ai;
     [SerializeField] float healthLevel;
     float maxHealth = 100f;
     Transform healthPos;
@@ -21,13 +22,16 @@ public class HealAction: UtilityActionAI
         }
         else return float.MinValue;
         if(healthPos == null || healthPos.position == Vector3.zero) return float.MinValue;
-        float distanceToHealth = Vector3.Distance(ai.position, healthPos.position);
+        float distanceToHealth = Vector3.Distance(transform.position, healthPos.position);
         return (desire * weight) / distanceToHealth;
     }
 
     public override void Execute()
     {
-        transform.position = Vector3.MoveTowards(transform.position, healthPos.position, 5f * Time.deltaTime);
+        if(ai.destination == null || healthPos == null)
+        {
+            ai.destination = GetClosestHealthPack().position;
+        }
         Debug.Log("Get health");
     }
 
@@ -40,5 +44,22 @@ public class HealAction: UtilityActionAI
     public float getHealth()
     {
         return healthLevel;
+    }
+
+    private Transform GetClosestHealthPack()
+    {
+        Transform closest = null;
+        float minDist = float.MaxValue;
+        foreach (Transform t in healthPosList)
+        {
+            if (t == null) continue;
+            float dist = Vector3.Distance(transform.position, t.position);
+            if (dist < minDist)
+            {
+                minDist = dist;
+                closest = t;
+            }
+        }
+        return closest;
     }
 }

@@ -34,7 +34,8 @@ public class FSMAgentController : MonoBehaviour
     [SerializeField] int currentIndex;
     int previousIndex;
 
-    LayerMask aiLayerMask;
+    [SerializeField] LayerMask aiLayerMask;
+    float searchTimer = 0.0f;
 
     void Awake()
     {
@@ -43,13 +44,13 @@ public class FSMAgentController : MonoBehaviour
         agent = GetComponent<NavMeshAgent>();
         pos = transform.position;
 
-        GameObject[] goalGOs = GameObject.FindGameObjectsWithTag("guardGoal");
+        // GameObject[] goalGOs = GameObject.FindGameObjectsWithTag("guardGoal");
 
-        //to find each destination for the guard
-        foreach (var goalGO in goalGOs)
-        {
-            goals.Add(goalGO.transform.position);
-        }
+        // //to find each destination for the guard
+        // foreach (var goalGO in goalGOs)
+        // {
+        //     goals.Add(goalGO.transform.position);
+        // }
     }   
 
     void Start()
@@ -69,12 +70,33 @@ public class FSMAgentController : MonoBehaviour
                 break;
             case State.Search:
                 Debug.Log("Search");
+                Search();
                 break;
             case State.Chase:
                 agent.speed = chaseSpeed;
                 Chase();
                 Debug.Log("Chase");
                 break;
+        }
+    }
+
+    private void Search()
+    {
+        searchTimer+=Time.deltaTime;
+
+        if(searchTimer>=5f)
+        {
+            searchTimer = 0f;
+            currentState = State.Patrol;
+        }
+        else
+        {
+            RaycastHit hit;
+            if(Physics.Raycast(transform.position, transform.forward, out hit, Mathf.Infinity, aiLayerMask))
+            {
+                currentState = State.Chase;
+                target = hit.transform;
+            }
         }
     }
 
@@ -99,6 +121,17 @@ public class FSMAgentController : MonoBehaviour
         {
             lastPos = target.transform.position;
             currentState = State.Search;
+        }
+        else
+        {
+            if(agent.remainingDistance <= .8f)
+            {
+                Debug.Log("Attack");
+            }
+            else if(agent.destination != target.transform.position)
+            {
+                agent.destination = target.transform.position;
+            }
         }
     }
 

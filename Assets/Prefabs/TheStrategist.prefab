@@ -17,7 +17,8 @@ GameObject:
   - component: {fileID: 2994353022134231258}
   - component: {fileID: 3824200812987355887}
   - component: {fileID: 7361580668902932978}
-  m_Layer: 0
+  - component: {fileID: 1329974099775751881}
+  m_Layer: 8
   m_Name: TheStrategist
   m_TagString: Strategist
   m_Icon: {fileID: 0}
@@ -70,7 +71,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
+  - {fileID: 2100000, guid: 2cc116a78213cd34d94d7cd5f5616416, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -131,6 +132,7 @@ MonoBehaviour:
   - {fileID: 2814001963363641764}
   - {fileID: 2994353022134231258}
   - {fileID: 3824200812987355887}
+  healAction: {fileID: 0}
 --- !u!114 &2814001963363641764
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -144,8 +146,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   weight: 0
-  ammoPos: {fileID: 0}
-  ai: {fileID: 8030560193665579314}
+  ammoPosList: []
+  ai: {fileID: 1329974099775751881}
   ammoLevel: 0.4
 --- !u!114 &2994353022134231258
 MonoBehaviour:
@@ -160,8 +162,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   weight: 0
-  healthPackPos: {fileID: 0}
-  ai: {fileID: 8030560193665579314}
+  healthPosList: []
+  ai: {fileID: 1329974099775751881}
   healthLevel: 0.3
 --- !u!114 &3824200812987355887
 MonoBehaviour:
@@ -176,8 +178,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   weight: 0
-  hidePos: {fileID: 0}
-  ai: {fileID: 8030560193665579314}
+  hidePosList: []
+  ai: {fileID: 1329974099775751881}
   enemyAi: {fileID: 0}
   dangerLevel: 0.5
 --- !u!54 &7361580668902932978
@@ -207,3 +209,25 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!195 &1329974099775751881
+NavMeshAgent:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5234368701523901009}
+  m_Enabled: 1
+  m_AgentTypeID: 0
+  m_Radius: 0.5
+  m_Speed: 3.5
+  m_Acceleration: 8
+  avoidancePriority: 50
+  m_AngularSpeed: 120
+  m_StoppingDistance: 0
+  m_AutoTraverseOffMeshLink: 1
+  m_AutoBraking: 1
+  m_AutoRepath: 1
+  m_Height: 2
+  m_BaseOffset: 1
+  m_WalkableMask: 4294967295
+  m_ObstacleAvoidanceType: 4

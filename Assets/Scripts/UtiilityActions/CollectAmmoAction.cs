@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 //Made with help of AI
 
@@ -7,7 +8,7 @@ public class CollectAmmoAction : UtilityActionAI
 {
     [SerializeField] float weight;
     public List<Transform> ammoPosList;
-    public Transform ai;
+    public NavMeshAgent ai;
     [SerializeField] float ammoLevel;
     float maxAmmo = 30f;
     Transform ammoPos;
@@ -23,13 +24,16 @@ public class CollectAmmoAction : UtilityActionAI
         else return float.MinValue;
 
         if(ammoPos == null || ammoPos.position == Vector3.zero) return float.MinValue;
-        float distanceToAmmo = Vector3.Distance(ai.position, ammoPos.position);
+        float distanceToAmmo = Vector3.Distance(transform.position, ammoPos.position);
         return (desire * weight) / distanceToAmmo;
     }
 
     public override void Execute()
     {
-        transform.position = Vector3.MoveTowards(transform.position, ammoPos.position, 5f * Time.deltaTime);
+        if(ai.destination == null || ammoPos == null)
+        {
+            ai.destination = GetClosestAmmo().position;
+        }
         Debug.Log("Get ammo");
     }
 
@@ -38,5 +42,22 @@ public class CollectAmmoAction : UtilityActionAI
         ammoLevel += newValue;
         ammoPosList.Remove(ammoPos);
         Debug.Log("Add ammo");
+    }
+
+    private Transform GetClosestAmmo()
+    {
+        Transform closest = null;
+        float minDist = float.MaxValue;
+        foreach (Transform t in ammoPosList)
+        {
+            if (t == null) continue;
+            float dist = Vector3.Distance(transform.position, t.position);
+            if (dist < minDist)
+            {
+                minDist = dist;
+                closest = t;
+            }
+        }
+        return closest;
     }
 }
