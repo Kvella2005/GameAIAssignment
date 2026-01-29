@@ -36,6 +36,8 @@ public class FSMAgentController : MonoBehaviour
 
     [SerializeField] LayerMask aiLayerMask;
     float searchTimer = 0.0f;
+    bool attack = true;
+    float attackCooldown;
 
     void Awake()
     {
@@ -66,16 +68,16 @@ public class FSMAgentController : MonoBehaviour
             case State.Patrol:
                 agent.speed = speed;
                 Patrol();
-                Debug.Log("Patrol");
+                //Debug.Log("Patrol");
                 break;
             case State.Search:
-                Debug.Log("Search");
+                //Debug.Log("Search");
                 Search();
                 break;
             case State.Chase:
                 agent.speed = chaseSpeed;
                 Chase();
-                Debug.Log("Chase");
+                //Debug.Log("Chase");
                 break;
         }
     }
@@ -117,21 +119,44 @@ public class FSMAgentController : MonoBehaviour
 
     void Chase()
     {
-        if(Vector3.Distance(transform.position, target.transform.position) > 5f)
+        if (target!= null ||target.gameObject.activeInHierarchy)
         {
-            lastPos = target.transform.position;
-            currentState = State.Search;
+            float enemyDist = Vector3.Distance(transform.position, target.transform.position);
+            if(enemyDist > 5f)
+            {
+                lastPos = target.transform.position;
+                currentState = State.Search;
+            }
+            else
+            {
+                if(enemyDist <= 1.5f)
+                {
+                    if(attack)
+                    {
+                        Attack();   
+                    }
+                }
+                else if(agent.destination != target.transform.position)
+                {
+                    agent.destination = target.transform.position;
+                }
+            }
+
+            if(attackCooldown >= 1.5f)
+            {
+                attackCooldown = 0f;
+                attack = true;
+            }
+            else if (!attack)
+            {
+                attackCooldown += Time.deltaTime;
+            }    
         }
         else
         {
-            if(agent.remainingDistance <= .8f)
-            {
-                Debug.Log("Attack");
-            }
-            else if(agent.destination != target.transform.position)
-            {
-                agent.destination = target.transform.position;
-            }
+            agent.ResetPath();
+            currentState = State.Patrol;
+            return;
         }
     }
 
@@ -144,5 +169,21 @@ public class FSMAgentController : MonoBehaviour
 
         agent.destination = goals[currentIndex];
         previousIndex = currentIndex;
+    }
+
+    void Attack()
+    {
+        string layerName = LayerMask.LayerToName(target.gameObject.layer);
+        if(layerName == "AI")
+        {
+            Debug.Log("Attack");
+            target.gameObject.SendMessage("TakeDamage", 15f, SendMessageOptions.DontRequireReceiver);
+        }
+        else
+        {
+            return;
+        }
+
+        attack = false;
     }
 }

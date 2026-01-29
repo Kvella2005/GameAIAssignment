@@ -10,17 +10,25 @@ public class HideAction : UtilityActionAI
     public List<Transform> hidePosList;
     public NavMeshAgent ai;
     public List<Transform> enemyAi;
-    [SerializeField] float dangerLevel;
-    float maxDangerLevel = 100f;
     Transform hidePos;
+    Transform currentSpot;
+    float hideTimer; 
+    float maxHideTimer = 3.5f; 
+    float cooldownTimer = 0f; 
 
     public override float GetUtilityScore()
     {
-        if(hidePosList.Count > 0)
+        if(cooldownTimer > 0f)
         {
-            hidePos = GetClosestHide();
+            cooldownTimer-=Time.deltaTime;
         }
-        else return float.MinValue;
+
+        if(hidePosList.Count == 0) return float.MinValue;
+
+        if(cooldownTimer > 0f)
+        {
+            return 0;
+        }
 
         float closestDistance = float.MaxValue;
         foreach(Transform enemy in enemyAi)
@@ -31,36 +39,78 @@ public class HideAction : UtilityActionAI
                 closestDistance = distance;
             }
         }
-        dangerLevel = 1f / (closestDistance + 1f);
+        float decayFactor = Mathf.Clamp01(1f - (hideTimer / maxHideTimer));
+        float dangerLevel = 1f / (closestDistance + 1f);
 
-        float distanceToCover = Vector3.Distance(transform.position, hidePos.position);
-        float desire = 1f - (dangerLevel/maxDangerLevel);
-        return (desire * weight) / distanceToCover;
+        return (dangerLevel * weight) * decayFactor;
     }
 
     public override void Execute()
-    {
-        if(ai.destination != hidePos.position)
+    {    
+        if(hidePos == null)
         {
-            ai.destination = hidePos.position;
+            // Use the actual transform for the exclusion check, not just position
+            hidePos = GetClosestHide(currentSpot != null ? currentSpot.position : (Vector3?)null);
+            
+            if(hidePos != null)
+            {
+                hideTimer = 0.001f; // Start the timer so we don't re-pick next frame
+                ai.SetDestination(hidePos.position);
+                currentSpot = hidePos; // Mark this as our "active" spot
+            }
         }
-        Debug.Log("Hide");
+
+        if(hidePos!= null && !ai.pathPending && ai.remainingDistance <= ai.stoppingDistance)
+        {
+            hideTimer+=Time.deltaTime;
+
+            if (hideTimer >= maxHideTimer)
+            {
+                cooldownTimer = 5f;
+                hidePos = null;
+                hideTimer = 0f;
+            }
+        }
     }
 
-    private Transform GetClosestHide()
+    private Transform GetClosestHide(Vector3? currentSpot = null)
     {
         Transform closest = null;
-        float minDist = float.MaxValue;
+        float maxMinDist = float.MinValue;
+
         foreach (Transform t in hidePosList)
         {
             if (t == null) continue;
             float dist = Vector3.Distance(transform.position, t.position);
-            if (dist < minDist)
+            if(dist < 1.5f || (currentSpot.HasValue && t.position == currentSpot.Value))
+                continue;
+
+            float closestEnemyDistance = float.MaxValue;
+            foreach(Transform enemy in enemyAi)
             {
-                minDist = dist;
+                float d = Vector3.Distance(t.position, enemy.position);
+                if(d < closestEnemyDistance) closestEnemyDistance = d;
+            }
+            if (closestEnemyDistance > maxMinDist)
+            {
+                maxMinDist = closestEnemyDistance;
                 closest = t;
             }
         }
         return closest;
+    }
+
+    public void ResetTimer()
+    {
+        if(cooldownTimer <= 0)
+        {
+            hideTimer = 0.0f;
+        }
+        hidePos = null;
+    }
+
+    public float getCooldown()
+    {
+        return cooldownTimer;
     }
 }

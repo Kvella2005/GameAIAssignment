@@ -1,0 +1,47 @@
+{
+    "GladiatorBehaviour": {
+        "checkpoints": [
+            {
+                "steps": 11648,
+                "file_path": "results\\gladiatorbehaviour\\GladiatorBehaviour\\GladiatorBehaviour-11648.onnx",
+                "reward": null,
+                "creation_time": 1769723048.971654,
+                "auxillary_file_paths": [
+                    "results\\gladiatorbehaviour\\GladiatorBehaviour\\GladiatorBehaviour-11648.pt"
+                ]
+            },
+            {
+                "steps": 26624,
+                "file_path": "results\\gladiatorbehaviour\\GladiatorBehaviour\\GladiatorBehaviour-26624.onnx",
+                "reward": null,
+                "creation_time": 1769723298.9592826,
+                "auxillary_file_paths": [
+                    "results\\gladiatorbehaviour\\GladiatorBehaviour\\GladiatorBehaviour-26624.pt"
+                ]
+            },
+            {
+                "steps": 60112,
+                "file_path": "results\\gladiatorbehaviour\\GladiatorBehaviour\\GladiatorBehaviour-60112.onnx",
+                "reward": null,
+                "creation_time": 1769723643.1469288,
+                "auxillary_file_paths": [
+                    "results\\gladiatorbehaviour\\GladiatorBehaviour\\GladiatorBehaviour-60112.pt"
+                ]
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 60112,
+            "file_path": "results\\gladiatorbehaviour\\GladiatorBehaviour.onnx",
+            "reward": null,
+            "creation_time": 1769723643.1469288,
+            "auxillary_file_paths": [
+                "results\\gladiatorbehaviour\\GladiatorBehaviour\\GladiatorBehaviour-60112.pt"
+            ]
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.3.0",
+        "mlagents_version": "1.1.0",
+        "torch_version": "2.2.1+cpu"
+    }
+}

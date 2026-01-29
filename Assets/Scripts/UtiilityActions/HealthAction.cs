@@ -18,7 +18,7 @@ public class HealAction: UtilityActionAI
         float desire = 1f - (healthLevel/maxHealth);
         if(healthPosList.Count > 0)
         {
-            healthPos = healthPosList[Random.Range(0, healthPosList.Count)];
+            healthPos = GetClosestHealthPack();
         }
         else return float.MinValue;
         if(healthPos == null || healthPos.position == Vector3.zero) return float.MinValue;
@@ -28,7 +28,7 @@ public class HealAction: UtilityActionAI
 
     public override void Execute()
     {
-        if(ai.destination == null || healthPos == null)
+        if(ai.remainingDistance <= ai.stoppingDistance)
         {
             ai.destination = GetClosestHealthPack().position;
         }
@@ -39,6 +39,18 @@ public class HealAction: UtilityActionAI
     {
         healthLevel += newValue;
         healthPosList.Remove(healthPos);
+    }
+
+    public void TakeDamage(float damageValue)
+    {
+        healthLevel -= damageValue;
+        if(healthLevel <= 0) Die();
+    }
+
+    private void Die()
+    {
+        Debug.Log("Strategist eliminated");
+        gameObject.SetActive(false);
     }
 
     public float getHealth()

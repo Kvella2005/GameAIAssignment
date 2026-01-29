@@ -13,7 +13,14 @@ public class UtilityAI : MonoBehaviour
     [SerializeField] List<UtilityActionAI> actions = new List<UtilityActionAI>();
 
     [SerializeField] HealAction healAction;
+    HideAction hideAction;
     float minHealth = 30f;
+
+    void Awake()
+    {
+        hideAction = GetComponent<HideAction>();
+    }
+
     // Update is called once per frame
     void Update()
     {
@@ -50,6 +57,8 @@ public class UtilityAI : MonoBehaviour
         if(bestAction != null)
         {
             bestAction.Execute();
+        
+            // if(bestAction != hideAction && hideAction.getCooldown() <= 0) hideAction.ResetTimer();
         }
     }
 }

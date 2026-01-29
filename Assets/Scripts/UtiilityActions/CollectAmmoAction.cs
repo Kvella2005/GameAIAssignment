@@ -19,7 +19,7 @@ public class CollectAmmoAction : UtilityActionAI
 
         if(ammoPosList.Count > 0)
         {
-            ammoPos = ammoPosList[Random.Range(0, ammoPosList.Count)];
+            ammoPos = GetClosestAmmo();
         }
         else return float.MinValue;
 
@@ -30,7 +30,7 @@ public class CollectAmmoAction : UtilityActionAI
 
     public override void Execute()
     {
-        if(ai.destination == null || ammoPos == null)
+        if(ai.remainingDistance <= ai.stoppingDistance)
         {
             ai.destination = GetClosestAmmo().position;
         }
