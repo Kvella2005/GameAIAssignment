@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
+//source: https://simon-truong.medium.com/understanding-unity-fsm-e55979e79180
 public class FSMAgentController : MonoBehaviour
 {
     enum State
@@ -27,6 +28,7 @@ public class FSMAgentController : MonoBehaviour
     [SerializeField] private float speed = 2f;
     [SerializeField] private float chaseSpeed = 5f;
     [SerializeField] Transform target;
+    Vector3 lastPos;
 
     List<Transform> targets;
     [SerializeField] int currentIndex;
@@ -70,6 +72,7 @@ public class FSMAgentController : MonoBehaviour
                 break;
             case State.Chase:
                 agent.speed = chaseSpeed;
+                Chase();
                 Debug.Log("Chase");
                 break;
         }
@@ -87,6 +90,15 @@ public class FSMAgentController : MonoBehaviour
         {
             currentState = State.Chase;
             target = hit.transform;
+        }
+    }
+
+    void Chase()
+    {
+        if(Vector3.Distance(transform.position, target.transform.position) > 5f)
+        {
+            lastPos = target.transform.position;
+            currentState = State.Search;
         }
     }
 

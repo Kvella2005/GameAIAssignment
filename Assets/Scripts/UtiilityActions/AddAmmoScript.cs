@@ -4,7 +4,7 @@ public class AddAmmoScript : MonoBehaviour
 {
     [SerializeField] float addAmmo;
 
-    void OnCollisionEnter(Collision collision)
+    void OnTriggerEnter(Collider collision)
     {
         Debug.Log("Collided with object");
         if(collision.gameObject.GetComponent<UtilityAI>())

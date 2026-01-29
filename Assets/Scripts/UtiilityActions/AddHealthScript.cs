@@ -4,7 +4,7 @@ public class AddHealthScript : MonoBehaviour
 {
     [SerializeField] float addHealth;
 
-    void OnCollisionEnter(Collision collision)
+    void OnTriggerEnter(Collider collision)
     {
         Debug.Log("Collided with object");
         if(collision.gameObject.GetComponent<UtilityAI>())

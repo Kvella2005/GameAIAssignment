@@ -154,7 +154,7 @@ BoxCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
@@ -241,6 +241,28 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   addAmmo: 30
+--- !u!114 &572159712 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3824200812987355887, guid: e585e79c387ff7646a2ed060fd187c65, type: 3}
+  m_PrefabInstance: {fileID: 5781285206002597982}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f095aec244f7169469756069d11e63b9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &572159713 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2994353022134231258, guid: e585e79c387ff7646a2ed060fd187c65, type: 3}
+  m_PrefabInstance: {fileID: 5781285206002597982}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8e90016326b1def4d80f0be00b55b396, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1060902955
 GameObject:
   m_ObjectHideFlags: 0
@@ -739,7 +761,7 @@ BoxCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
@@ -834,6 +856,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1442482402719307056, guid: e585e79c387ff7646a2ed060fd187c65, type: 3}
+      propertyPath: m_IsTrigger
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2814001963363641764, guid: e585e79c387ff7646a2ed060fd187c65, type: 3}
+      propertyPath: weight
+      value: 0.5
+      objectReference: {fileID: 0}
     - target: {fileID: 2814001963363641764, guid: e585e79c387ff7646a2ed060fd187c65, type: 3}
       propertyPath: ammoPos
       value: 
@@ -841,6 +871,22 @@ PrefabInstance:
     - target: {fileID: 2814001963363641764, guid: e585e79c387ff7646a2ed060fd187c65, type: 3}
       propertyPath: ammoLevel
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2814001963363641764, guid: e585e79c387ff7646a2ed060fd187c65, type: 3}
+      propertyPath: 'ammoPos.Array.data[0]'
+      value: 
+      objectReference: {fileID: 291853796}
+    - target: {fileID: 2814001963363641764, guid: e585e79c387ff7646a2ed060fd187c65, type: 3}
+      propertyPath: ammoPosList.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2814001963363641764, guid: e585e79c387ff7646a2ed060fd187c65, type: 3}
+      propertyPath: 'ammoPosList.Array.data[0]'
+      value: 
+      objectReference: {fileID: 291853796}
+    - target: {fileID: 2994353022134231258, guid: e585e79c387ff7646a2ed060fd187c65, type: 3}
+      propertyPath: weight
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 2994353022134231258, guid: e585e79c387ff7646a2ed060fd187c65, type: 3}
       propertyPath: healthLevel
@@ -850,12 +896,32 @@ PrefabInstance:
       propertyPath: healthPackPos
       value: 
       objectReference: {fileID: 2063390135}
+    - target: {fileID: 2994353022134231258, guid: e585e79c387ff7646a2ed060fd187c65, type: 3}
+      propertyPath: healthPosList.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2994353022134231258, guid: e585e79c387ff7646a2ed060fd187c65, type: 3}
+      propertyPath: 'healthPosList.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2063390135}
+    - target: {fileID: 3824200812987355887, guid: e585e79c387ff7646a2ed060fd187c65, type: 3}
+      propertyPath: weight
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3824200812987355887, guid: e585e79c387ff7646a2ed060fd187c65, type: 3}
       propertyPath: enemyAi
       value: 
       objectReference: {fileID: 1465060888}
     - target: {fileID: 3824200812987355887, guid: e585e79c387ff7646a2ed060fd187c65, type: 3}
       propertyPath: hidePos
+      value: 
+      objectReference: {fileID: 1060902956}
+    - target: {fileID: 3824200812987355887, guid: e585e79c387ff7646a2ed060fd187c65, type: 3}
+      propertyPath: hidePosList.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3824200812987355887, guid: e585e79c387ff7646a2ed060fd187c65, type: 3}
+      propertyPath: 'hidePosList.Array.data[0]'
       value: 
       objectReference: {fileID: 1060902956}
     - target: {fileID: 5234368701523901009, guid: e585e79c387ff7646a2ed060fd187c65, type: 3}
@@ -874,6 +940,22 @@ PrefabInstance:
       propertyPath: m_IsKinematic
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7913779078533544781, guid: e585e79c387ff7646a2ed060fd187c65, type: 3}
+      propertyPath: healAction
+      value: 
+      objectReference: {fileID: 572159713}
+    - target: {fileID: 7913779078533544781, guid: e585e79c387ff7646a2ed060fd187c65, type: 3}
+      propertyPath: actions.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7913779078533544781, guid: e585e79c387ff7646a2ed060fd187c65, type: 3}
+      propertyPath: 'actions.Array.data[1]'
+      value: 
+      objectReference: {fileID: 572159712}
+    - target: {fileID: 7913779078533544781, guid: e585e79c387ff7646a2ed060fd187c65, type: 3}
+      propertyPath: 'actions.Array.data[2]'
+      value: 
+      objectReference: {fileID: 572159713}
     - target: {fileID: 8030560193665579314, guid: e585e79c387ff7646a2ed060fd187c65, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
